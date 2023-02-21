@@ -34,7 +34,11 @@ class BookController extends Controller
      */
     public function store(StoreBookRequest $request): RedirectResponse
     {
-        //
+        Book::create([
+            'title' => $request->title
+        ]);
+
+        return redirect()->route('books.index')->with('message', 'Book created successfully');
     }
 
     /**
@@ -42,7 +46,9 @@ class BookController extends Controller
      */
     public function show(Book $book): Response
     {
-        //
+        return Inertia::render('Books/Show', [
+            'resource' => $book
+        ]);
     }
 
     /**
@@ -50,7 +56,9 @@ class BookController extends Controller
      */
     public function edit(Book $book): Response
     {
-        //
+        return Inertia::render('Books/Edit', [
+            'resource' => $book
+        ]);
     }
 
     /**
@@ -58,7 +66,9 @@ class BookController extends Controller
      */
     public function update(UpdateBookRequest $request, Book $book): RedirectResponse
     {
-        //
+        $book->update($request->validated());
+
+        return redirect()->route('books.index')->with('message', 'Book updated successfully');
     }
 
     /**
