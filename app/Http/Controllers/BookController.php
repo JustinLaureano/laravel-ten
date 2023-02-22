@@ -5,19 +5,25 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreBookRequest;
 use App\Http\Requests\UpdateBookRequest;
 use App\Models\Book;
+use App\Services\BookService;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class BookController extends Controller
 {
+    public function __construct(private BookService $bookService)
+    {
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index(): Response
     {
         return Inertia::render('Books/Index', [
-            'collection' => Book::paginate()
+            'collection' => $this->bookService->paginate(),
+            'alert' => session('alert')
         ]);
     }
 
@@ -34,11 +40,11 @@ class BookController extends Controller
      */
     public function store(StoreBookRequest $request): RedirectResponse
     {
-        Book::create([
-            'title' => $request->title
-        ]);
+        $this->bookService->store($request->validated());
 
-        return redirect()->route('books.index')->with('message', 'Book created successfully');
+        return redirect()
+                ->route('books.index')
+                ->with('alert', $this->bookService->storedAlert());
     }
 
     /**
@@ -68,7 +74,9 @@ class BookController extends Controller
     {
         $book->update($request->validated());
 
-        return redirect()->route('books.index')->with('message', 'Book updated successfully');
+        return redirect()
+                ->route('books.index')
+                ->with('alert', $this->bookService->updatedAlert());
     }
 
     /**
@@ -78,6 +86,8 @@ class BookController extends Controller
     {
         $book->delete();
 
-        return redirect()->route('books.index')->with('message', 'Book Delete Successfully');
+        return redirect()
+                ->route('books.index')
+                ->with('alert', $this->bookService->deletedAlert());
     }
 }

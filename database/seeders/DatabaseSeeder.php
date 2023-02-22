@@ -18,5 +18,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'jmlaureano@prospira.us',
         ]);
+
+        \App\Models\Book::factory(80)->create();
     }
 }

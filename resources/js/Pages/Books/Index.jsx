@@ -11,6 +11,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import Stack from '@mui/material/Stack';
 
 
 export default function Index(props) {
@@ -18,6 +19,12 @@ export default function Index(props) {
     return (
         <GuestLayout>
             <Paper>
+                <div>
+                    <Link href={route('books.create')}>
+                        Add Book
+                    </Link>
+                </div>
+
                 <TableContainer>
                     <Table>
                         <TableHead>
@@ -37,33 +44,38 @@ export default function Index(props) {
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <Pagination
-                    page={props.collection.current_page}
-                    count={props.collection.last_page}
-                    renderItem={item => {
-                        let url = props.collection.path;
+                <Stack
+                    direction="row"
+                    justifyContent="flex-end"
+                    alignItems="center"
+                    sx={{ p: 1 }}
+                >
+                    <Pagination
+                        page={props.collection.current_page}
+                        count={props.collection.last_page}
+                        renderItem={item => {
+                            let url = props.collection.path;
 
-                        if (item.type == 'previous') {
-                            url = props.collection.prev_page_url;
-                        }
-                        else if (item.type == 'next') {
-                            url = props.collection.next_page_url
-                        }
-                        else if (item.type == 'page') {
-                            url = props.collection.links[item.page].url;
-                        }
+                            if (item.type == 'previous') {
+                                url = props.collection.prev_page_url;
+                            }
+                            else if (item.type == 'next') {
+                                url = props.collection.next_page_url
+                            }
+                            else if (item.type == 'page') {
+                                url = props.collection.links[item.page].url;
+                            }
 
-                        console.log(item)
-
-                        return (
-                            <PaginationItem
-                                component={Link}
-                                href={url}
-                                {...item}
-                            />
-                        )
-                    }}
-                />
+                            return (
+                                <PaginationItem
+                                    component={Link}
+                                    href={url}
+                                    {...item}
+                                />
+                            )
+                        }}
+                    />
+                </Stack>
             </Paper>
 
         </GuestLayout>

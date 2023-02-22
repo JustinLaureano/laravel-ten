@@ -7,6 +7,10 @@ export default function Dash(props) {
     return (
         <GuestLayout>
             <p>You have been clocked in as {props.clock_number}.</p>
+
+            <Link href={route('books.index')}>
+                Books
+            </Link>
         </GuestLayout>
     );
 }
