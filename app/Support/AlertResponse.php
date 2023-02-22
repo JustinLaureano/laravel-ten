@@ -15,6 +15,13 @@ class AlertResponse
 
     private string $message;
 
+    private int $duration = 4000;
+
+    private array $anchor_origin = [
+        'vertical' => 'top',
+        'horizontal' => 'right'
+    ];
+
     public function error(string $message) : array
     {
         $this->severity = self::ERROR;
@@ -49,6 +56,11 @@ class AlertResponse
 
     public function toArray() : array
     {
-        return ['severity' => $this->severity, 'message' => $this->message];
+        return [
+            'severity' => $this->severity,
+            'message' => $this->message,
+            'duration' => $this->duration,
+            'anchor_origin' => $this->anchor_origin
+        ];
     }
 }

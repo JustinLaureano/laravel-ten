@@ -1,6 +1,7 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
 import GuestLayout from '@/Layouts/GuestLayout';
+import SnackbarAlert from '@/Components/SnackbarAlert'
 
 import Pagination from '@mui/material/Pagination';
 import PaginationItem from '@mui/material/PaginationItem';
@@ -13,9 +14,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 
-
 export default function Index(props) {
-    console.log(props)
     return (
         <GuestLayout>
             <Paper>
@@ -78,6 +77,7 @@ export default function Index(props) {
                 </Stack>
             </Paper>
 
+            {props.alert && <SnackbarAlert alert={props.alert} />}
         </GuestLayout>
     );
 }
