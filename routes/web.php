@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -34,17 +35,23 @@ Route::get('/clock', function () {
 
 
 Route::post('signin', function (Request $request) {
+        $employee = \App\Models\Employee::findByClockNumber($request->input('clock_number'));
 
-        session([ 'clock_number' => $request->input('clock_number') ]);
+        if (!$employee) {
+            return back()->withErrors([ 'clock_number' => 'invalid credentials' ]);
+        }
+
+        Auth::guard('employee')->login($employee);
 
         return redirect()->route('dash');
+
     })
     ->name('signin');
 
 
 Route::middleware('auth.employee')
     ->get('/dash', function (Request $request) {
-        return Inertia::render('Dash', ['clock_number' => session('clock_number')]);
+        return Inertia::render('Dash');
     })
     ->name('dash');
 
@@ -65,3 +72,17 @@ Route::middleware('auth.employee')->group( base_path('routes/resources/books.php
 
 
 require __DIR__.'/auth.php';
+
+
+
+
+Route::get('/book', function () {
+    $book = \App\Models\Book::create([
+        'title' => 'lkjaga'
+    ]);
+
+    \App\Events\BookCreated::dispatch($book);
+
+
+    return Inertia::render('Books/Show');
+});
